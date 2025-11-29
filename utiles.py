@@ -128,7 +128,7 @@ def mostrar_productos_guardados ():
          # Suponiendo que la tupla es (id, nombre, categoria, precio)
         print(f"{i}. ID: {producto[0]} | Nombre: {producto[1]} | Categoria: {producto[2]} | Precio: {producto[3]}")
 
-        """"
+        """
         La funcion motrar_productos_guardados, verifica si el cliente ha ingresado informacion.
         En el caso que asi sea muestra los mismos de manera ordenada, incluyendo los datos 
         que se han solicitados anteriormente. 
@@ -171,6 +171,7 @@ def eliminar_productos():
     if not id_input.isdigit():
         print("Debe ingresar un ID numérico válido.")
         return
+
     id_producto = int(id_input)
 
     try:
@@ -178,24 +179,26 @@ def eliminar_productos():
             cursor = conn.cursor()
             cursor.execute(f"SELECT * FROM {TABLE_NAME} WHERE id = ?", (id_producto,))
             producto = cursor.fetchone()
+
             if not producto:
                 print("No se encontró un producto con ese ID.")
                 return
-        # Mostrar el producto y pedir confirmación
-        print(f"\nProducto encontrado:")
-        print(f"ID: {producto[0]} | Nombre: {producto[1]} | Categoria: {producto[2]} | Precio: {producto[3]}")
-            
-        # Confirmación
-        confirmar = input("\n¿Está seguro que desea eliminar el producto? (S/N): ").strip().lower()
-        if confirmar != "s":
-            print("Operación cancelada.")
-            return
+
+            # Mostrar el producto y pedir confirmación
+            print("\nProducto encontrado:")
+            print(f"ID: {producto[0]} | Nombre: {producto[1]} | Categoria: {producto[2]} | Precio: {producto[3]}")
+
+            # Confirmación
+            confirmar = input("\n¿Está seguro que desea eliminar el producto? (S/N): ").strip().lower()
+            if confirmar != "s":
+                print("Operación cancelada.")
+                return
 
             # Si confirma, eliminar
-        cursor.execute(f"DELETE FROM {TABLE_NAME} WHERE id = ?", (id_producto,))
-        conn.commit()
+            cursor.execute(f"DELETE FROM {TABLE_NAME} WHERE id = ?", (id_producto,))
+            conn.commit()
 
-        print(f"Producto con ID {id_producto} eliminado exitosamente.")
+            print(f"Producto con ID {id_producto} eliminado exitosamente.")
 
     except sqlite3.Error as e:
         print("Error al eliminar el producto:", e)
